@@ -1,0 +1,13 @@
+/personal
+/resource
+/待深度整理
+/待整理
+/学习视频
+/book
+
+*.log
+*.ini
+
+.vscode
+*.jar
+*.py[cod]
