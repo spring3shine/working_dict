@@ -1,5 +1,6 @@
 # coding=utf-8
 # 本题为考试多行输入输出规范示例，无需提交，不计分。
+from math import inf
 from typing import List
 
 
@@ -18,49 +19,41 @@ from typing import List
 # 给定数字的范围是 [0, 10^8]
 #
 # class Solution:     def maximumSwap(self, num: int) -> int:
-
-
 class Solution:
-    def maximumSwap(self, num: int) -> int:
-        l_num = []
-        while num:
-            l_num.append(num % 10)
-            num = num // 10
-        l_num.reverse()
+    def platesBetweenCandles(self, s: str, queries: List[List[int]]) -> List[int]:
+        n = len(s)
 
-        for i,v in enumerate(l_num):
-            _max = v
-            _max_id = i
-            for j in range(i + 1, len(l_num)):
-                if l_num[j] > _max:
-                    _max = l_num[j]
-                    _max_id = j
-            if l_num[i] < _max:
-                l_num[i], l_num[_max_id] = l_num[_max_id], l_num[i]
-                break
+        right = [-1] * n
+        r = -1
+        for i in range(n - 1, -1, -1):
+            if s[i] == '|':
+                r = i
+            right[i] = r
 
-        return int(''.join(map(str, l_num)))
-        #
-        #
-        # # return l_num
-        # ret = 0
-        # _u = 1
-        # for i in range(len(l_num)-1,-1,-1):
-        #     ret += l_num[i] * _u
-        #     _u *= 10
-        # return ret
+        left = [-1] * n
+        l = -1
+        preSum = [0] * n
+        for i in range(n):
+            if i > 0:
+                preSum[i] = preSum[i-1]
+            if s[i] == '*':
+                preSum[i] += 1
+            if s[i] == '|':
+                l = i
+            left[i] = l
 
-
+        ret = []
+        for (l, r) in queries:
+            _l = right[l]
+            _r = left[r]
+            count = preSum[_r] - preSum[_l] if _l < _r  else 0
+            ret.append(count)
+        return ret
 
 
 if __name__ == '__main__':
-    assert Solution().maximumSwap(2736) == 7236
-    assert Solution().maximumSwap(1259) == 9251
-    assert Solution().maximumSwap(9973) == 9973
-    assert Solution().maximumSwap(98368) == 98863
-    assert Solution().maximumSwap(1) == 1
-    assert Solution().maximumSwap(11) == 11
-    assert Solution().maximumSwap(12) == 21
+    # print(Solution().platesBetweenCandles("**|**|***|", [[2, 5], [5, 9]]))
+    print(Solution().platesBetweenCandles("***|**|*****|**||**|*", [[1, 17], [4, 5], [14, 17], [5, 11], [15, 16]]))
     # print(Solution().maximumSwap(2736))
     # print(Solution().maximumSwap(1259))
     # print(Solution().maximumSwap(9973))
